@@ -4,6 +4,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
 	"net/http"
+	"whisper-bot/internal/command"
 	"whisper-bot/internal/config"
 )
 
@@ -45,11 +46,17 @@ func main() {
 
 	log.Println("Listening on " + webhookUrl)
 
+	command.Init(bot)
+
 	for update := range updates {
 		if update.Message == nil {
 
 		}
 
-		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+		for _, c := range command.GetCommands() {
+			if c.CanRun(update) {
+				c.Run(update)
+			}
+		}
 	}
 }

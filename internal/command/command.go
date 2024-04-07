@@ -15,6 +15,14 @@ func Init(telegramBot *tgbotapi.BotAPI) {
 	}
 }
 
-func GetCommands() []Command {
-	return commands
+func Handle(update tgbotapi.Update) {
+	if update.Message == nil {
+		return
+	}
+
+	for _, command := range commands {
+		if command.CanRun(update) {
+			command.Run(update)
+		}
+	}
 }

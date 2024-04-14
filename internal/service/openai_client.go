@@ -22,11 +22,11 @@ func NewOpenAIClient() *OpenAIClient {
 	}
 }
 
-func (c OpenAIClient) UploadFile(inputFile string) {
+func (c OpenAIClient) ConvertSpeechToText(inputFile string) (string, error) {
 	ctx := context.Background()
 
 	req := openai.AudioRequest{
-		Model:    openai.Whisper1,
+		Model:    openai.Whisper1,		
 		FilePath: inputFile,
 	}
 
@@ -34,8 +34,10 @@ func (c OpenAIClient) UploadFile(inputFile string) {
 
 	if err != nil {
 		log.Printf("Transcription error: %v\n", err)
-		return
+		return "", err
 	}
 
 	log.Println(resp.Text)
+
+	return resp.Text, nil
 }

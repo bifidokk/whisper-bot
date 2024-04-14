@@ -19,7 +19,7 @@ func (c VoiceCommand) CanRun(update tgbotapi.Update) bool {
 }
 
 func (c VoiceCommand) Run(update tgbotapi.Update) {
-	fmt.Printf("%+v\n", update.Message.Voice)
+	log.Printf("%+v\n", update.Message.Voice)
 
 	url, err := c.Bot.GetFileDirectURL(update.Message.Voice.FileID)
 
@@ -45,5 +45,15 @@ func (c VoiceCommand) Run(update tgbotapi.Update) {
 		return
 	}
 
-	c.Client.UploadFile(outputFilePath)
+	text, err := c.Client.ConvertSpeechToText(outputFilePath)
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	msg := tgbotapi.NewMessage(update.Message.Chat.ID, text)
+	_, err = c.Bot.Send(msg)
+
+	log.Printf("%+v\n", err )
 }

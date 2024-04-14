@@ -1,6 +1,10 @@
 package command
 
-import tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+import (
+	"whisper-bot/internal/service"
+
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+)
 
 type Command interface {
 	CanRun(update tgbotapi.Update) bool
@@ -10,8 +14,10 @@ type Command interface {
 var commands []Command
 
 func Init(telegramBot *tgbotapi.BotAPI) {
+	openaiClient := service.NewOpenAIClient()
+
 	commands = []Command{
-		VoiceCommand{Bot: telegramBot},
+		VoiceCommand{Bot: telegramBot, Client: openaiClient},
 	}
 }
 

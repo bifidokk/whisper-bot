@@ -11,6 +11,7 @@ import (
 
 type VoiceCommand struct {
 	Bot *tgbotapi.BotAPI
+	Client *service.OpenAIClient
 }
 
 func (c VoiceCommand) CanRun(update tgbotapi.Update) bool {
@@ -44,5 +45,5 @@ func (c VoiceCommand) Run(update tgbotapi.Update) {
 		return
 	}
 
-	log.Println(outputFilePath)
+	c.Client.UploadFile(outputFilePath)
 }

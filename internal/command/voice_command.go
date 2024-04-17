@@ -10,7 +10,7 @@ import (
 )
 
 type VoiceCommand struct {
-	Bot *tgbotapi.BotAPI
+	Bot    *tgbotapi.BotAPI
 	Client *service.OpenAIClient
 }
 
@@ -55,5 +55,5 @@ func (c VoiceCommand) Run(update tgbotapi.Update) {
 	msg := tgbotapi.NewMessage(update.Message.Chat.ID, text)
 	_, err = c.Bot.Send(msg)
 
-	log.Printf("%+v\n", err )
+	log.Printf("%+v\n", err)
 }

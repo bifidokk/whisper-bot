@@ -8,6 +8,8 @@ import (
 	"github.com/sashabaranov/go-openai"
 )
 
+const prompt string = "Use capital letters and punctuation. Do not repeat yourself. Do not describe ambient sounds or noise or silence, just ommit. Break the text into paragraphs. Separate paragraphs with blank lines"
+
 type OpenAIClient struct {
 	client *openai.Client
 }
@@ -26,8 +28,9 @@ func (c OpenAIClient) ConvertSpeechToText(inputFile string) (string, error) {
 	ctx := context.Background()
 
 	req := openai.AudioRequest{
-		Model:    openai.Whisper1,		
+		Model:    openai.Whisper1,
 		FilePath: inputFile,
+		Prompt:   prompt,
 	}
 
 	resp, err := c.client.CreateTranscription(ctx, req)

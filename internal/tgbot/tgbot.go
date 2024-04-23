@@ -15,6 +15,13 @@ func Create() *tgbotapi.BotAPI {
 	webhookPath = config.GetEnv("webhook_path")
 	baseUrl := config.GetEnv("base_url")
 
+	go func() {
+		err := http.ListenAndServe(baseUrl, nil)
+		if err != nil {
+			panic(err)
+		}
+	}()
+
 	bot, err := tgbotapi.NewBotAPI(botToken)
 	if err != nil {
 		panic(err)
@@ -35,13 +42,6 @@ func Create() *tgbotapi.BotAPI {
 	if info.LastErrorDate != 0 {
 		log.Printf("Telegram callback failed: %s", info.LastErrorMessage)
 	}
-
-	go func() {
-		err := http.ListenAndServe(baseUrl, nil)
-		if err != nil {
-			panic(err)
-		}
-	}()
 
 	return bot
 }
